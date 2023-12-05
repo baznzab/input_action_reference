@@ -1,0 +1,90 @@
+[gd_scene load_steps=18 format=3 uid="uid://dkuldg8qlr37u"]
+
+[ext_resource type="Script" path="res://scripts/free_camera.gd" id="1_05wd5"]
+[ext_resource type="Script" path="res://scripts/mouse_captor.gd" id="1_jwt3m"]
+[ext_resource type="Script" path="res://addons/input_action_reference/scripts/input_action_reference.gd" id="2_u2tlj"]
+[ext_resource type="Material" uid="uid://8krrrlcr54kr" path="res://materials/mat_proto.tres" id="4_3tyt5"]
+[ext_resource type="Material" uid="uid://cfrfj6lcumkfl" path="res://materials/mat_white.tres" id="4_v677t"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_t0hyj"]
+
+[sub_resource type="Sky" id="Sky_6ced3"]
+sky_material = SubResource("ProceduralSkyMaterial_t0hyj")
+
+[sub_resource type="Environment" id="Environment_olxnw"]
+background_mode = 2
+sky = SubResource("Sky_6ced3")
+tonemap_mode = 3
+volumetric_fog_enabled = true
+volumetric_fog_albedo = Color(0.760784, 0.839216, 1, 1)
+
+[sub_resource type="Resource" id="Resource_vhmed"]
+script = ExtResource("2_u2tlj")
+value = &"free_camera_move_left"
+
+[sub_resource type="Resource" id="Resource_syda2"]
+script = ExtResource("2_u2tlj")
+value = &"free_camera_move_right"
+
+[sub_resource type="Resource" id="Resource_lk7cr"]
+script = ExtResource("2_u2tlj")
+value = &"free_camera_move_forward"
+
+[sub_resource type="Resource" id="Resource_mmoks"]
+script = ExtResource("2_u2tlj")
+value = &"free_camera_move_back"
+
+[sub_resource type="Resource" id="Resource_mwgfw"]
+script = ExtResource("2_u2tlj")
+value = &"free_camera_turbo"
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ad0al"]
+size = Vector2(1000, 1000)
+
+[sub_resource type="TorusMesh" id="TorusMesh_5u1fm"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_uu8xv"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_ub117"]
+
+[node name="Main" type="Node3D"]
+
+[node name="MouseCaptor" type="Node" parent="."]
+script = ExtResource("1_jwt3m")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.707107, 0.5, -0.5, 0, 0.707107, 0.707107, 0.707107, -0.5, 0.5, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_olxnw")
+
+[node name="FreeCamera" type="Camera3D" parent="."]
+transform = Transform3D(0.707107, -0.5, 0.5, 0, 0.707107, 0.707107, -0.707107, -0.5, 0.5, 2.5, 2.5, 2.5)
+script = ExtResource("1_05wd5")
+action_move_left = SubResource("Resource_vhmed")
+action_move_right = SubResource("Resource_syda2")
+action_move_forward = SubResource("Resource_lk7cr")
+action_move_back = SubResource("Resource_mmoks")
+action_turbo = SubResource("Resource_mwgfw")
+
+[node name="Geometry" type="Node3D" parent="."]
+
+[node name="Plane" type="CSGMesh3D" parent="Geometry"]
+mesh = SubResource("PlaneMesh_ad0al")
+material = ExtResource("4_3tyt5")
+
+[node name="Torus" type="CSGMesh3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.194, 0.25, -2.384)
+mesh = SubResource("TorusMesh_5u1fm")
+material = ExtResource("4_v677t")
+
+[node name="Box" type="CSGMesh3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.93572, 0.5, 1.67411)
+mesh = SubResource("BoxMesh_uu8xv")
+material = ExtResource("4_v677t")
+
+[node name="Sphere" type="CSGMesh3D" parent="Geometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08273, 0.5, -0.638372)
+mesh = SubResource("SphereMesh_ub117")
+material = ExtResource("4_v677t")
